@@ -2,12 +2,14 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const app = express()
+const password = encodeURIComponent('WECjGLhlvNPwd5pw')
 const PORT = 8080
 
 app.use(express.json())
 app.use(cors())
 
-mongoose.connect('mongodb://localhost:27017/vinylsDB')
+// mongoose.connect('mongodb://localhost:27017/vinylsDB')
+mongoose.connect(`mongodb+srv://vercel-admin-user:${password}@cluster0.slzg83z.mongodb.net/?retryWrites=true&w=majority`)
 
 const vinylSchema = new mongoose.Schema({
   artist: String,
