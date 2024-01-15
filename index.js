@@ -80,6 +80,20 @@ app.put('/vinyls/:id', async (req, res) => {
   }
 })
 
+// Filters
+app.get('/vinyls/:artist', async (req, res) => {
+  const { artist } = req.params
+
+  try {
+    const vinyls = await Vinyl.find({ artist });
+    res.status(200).send({
+      vinyls
+    });
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' });
+  }
+});
+
 app.listen(
   PORT,
   () => console.log(`Server is running on http://localhost:${PORT}`)
