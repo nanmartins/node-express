@@ -12,7 +12,7 @@
 
   <script>
     async function fetchData() {
-      const response = await fetch('/api/vinyls')
+      const response = await fetch('/vinyls')
       const data = await response.json()
       document.getElementById('apiData').innerHTML = JSON.stringify(data, null, 2)
     }
