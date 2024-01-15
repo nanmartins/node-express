@@ -106,15 +106,32 @@ app.get('/vinyls/:artist', async (req, res) => {
   const { artist } = req.params
 
   try {
-    const vinyls = await Vinyl.find({ artist });
+    const vinyls = await Vinyl.find({ artist })
     res.status(200).send({
       vinyls
-    });
+    })
   }
   catch (error) {
-    res.status(500).send({ message: 'Internal Server Error' });
+    res.status(500).send({ message: 'Internal Server Error' })
   }
-});
+})
+
+// Filter Vinyl by ID
+app.get('/vinyls/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const vinyl = await Vinyl.findById(id)
+    if (!vinyl) {
+      return res.status(404).send({ message: 'Vinyl not found.' })
+    }
+    res.status(200).send({ vinyl })
+  }
+  catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
+  }
+})
+
+
 
 app.listen(
   PORT,
