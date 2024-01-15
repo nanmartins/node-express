@@ -26,7 +26,8 @@ app.get('/vinyls', async (req, res) => {
     res.status(200).send({
       vinyls
     })
-  } catch (error) {
+  }
+  catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
@@ -50,7 +51,8 @@ app.post('/vinyls', async (req, res) => {
     await newVinyl.save()
 
     res.status(201).send({ message: 'Vinyl created successfully', vinyl: newVinyl })
-  } catch (error) {
+  }
+  catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
@@ -75,7 +77,26 @@ app.put('/vinyls/:id', async (req, res) => {
     await vinyl.save()
 
     res.status(200).send({ message: 'Vinyl updated successfully', vinyl })
-  } catch (error) {
+  }
+  catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
+  }
+})
+
+
+app.delete('/vinyls/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const vinyl = await Vinyl.findByIdAndDelete(id)
+
+    if (!vinyl) {
+      return res.status(404).send({ message: 'Vinyl not found.' })
+    }
+
+    res.status(200).send({ message: 'Vinyl deleted successfully', deletedVinyl: vinyl })
+  }
+  catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
@@ -89,7 +110,8 @@ app.get('/vinyls/:artist', async (req, res) => {
     res.status(200).send({
       vinyls
     });
-  } catch (error) {
+  }
+  catch (error) {
     res.status(500).send({ message: 'Internal Server Error' });
   }
 });
