@@ -1,61 +1,82 @@
-const express = require('express');
-const app = express();
-const PORT = 8080;
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors')
+const app = express()
+const PORT = 8080
 
-app.use(express.json());
+app.use(express.json())
+app.use(cors())
 
-let vinyls = [];
+mongoose.connect('mongodb://localhost:27017/vinylsDB')
 
-app.get('/vinyls', (req, res) => {
-  res.status(200).send({
-    vinyls
-  });
-});
+const vinylSchema = new mongoose.Schema({
+  artist: String,
+  album: String,
+  year: Number
+})
 
-app.post('/vinyls', (req, res) => {
-  const { artist, album, year } = req.body;
+const Vinyl = mongoose.model('Vinyl', vinylSchema)
 
-  if (!artist || !album || !year) {
-    return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' });
+
+app.get('/vinyls', async (req, res) => {
+  try {
+    const vinyls = await Vinyl.find()
+    res.status(200).send({
+      vinyls
+    })
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
+  }
+})
+
+
+app.post('/vinyls', async (req, res) => {
+  const { artist, album, year } = req.body
+
+  if(!artist || !album || !year) {
+    return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
   }
 
-  const newVinyl = {
-    id: generateUniqueId(),
-    artist,
-    album,
-    year
-  };
+  try {
+    const newVinyl = new Vinyl({
+      artist,
+      album,
+      year
+    })
 
-  vinyls.push(newVinyl);
+    await newVinyl.save()
 
-  res.status(201).send({ message: 'Vinyl created successfully', vinyl: newVinyl });
-});
-
-app.put('/vinyls/:id', (req, res) => {
-  const { id } = req.params;
-  const { artist, album, year } = req.body;
-
-  const index = vinyls.findIndex(vinyl => vinyl.id === id);
-
-  if (index === -1) {
-    return res.status(404).send({ message: 'Vinyl not found.' });
+    res.status(201).send({ message: 'Vinyl created successfully', vinyl: newVinyl })
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
   }
+})
 
-  vinyls[index] = {
-    id,
-    artist: artist || vinyls[index].artist,
-    album: album || vinyls[index].album,
-    year: year || vinyls[index].year
-  };
 
-  res.status(200).send({ message: 'Vinyl updated successfully', vinyl: vinyls[index] });
-});
+app.put('/vinyls/:id', async (req, res) => {
+  const { id } = req.params
+  const { artist, album, year } = req.body
 
-function generateUniqueId() {
-  return '_' + Math.random().toString(36).substr(2, 9);
-}
+  try {
+    const vinyl = await Vinyl.findById(id)
+
+    if (!vinyl) {
+      return res.status(404).send({ message: 'Vinyl not found.' })
+    }
+
+    vinyl.artist = artist || vinyl.artist
+    vinyl.album = album || vinyl.album
+    vinyl.year = year || vinyl.year
+
+    await vinyl.save()
+
+    res.status(200).send({ message: 'Vinyl updated successfully', vinyl })
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
+  }
+})
 
 app.listen(
   PORT,
   () => console.log(`Server is running on http://localhost:${PORT}`)
-);
+)
