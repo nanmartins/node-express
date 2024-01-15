@@ -120,11 +120,13 @@ app.get('/vinyls/:artist', async (req, res) => {
 app.get('/vinyls/:id', async (req, res) => {
   const { id } = req.params
   try {
-    const vinyl = await Vinyl.findById(id)
+    const vinyl = await Vinyl.findByIdAndUpdate(id)
     if (!vinyl) {
       return res.status(404).send({ message: 'Vinyl not found.' })
     }
-    res.status(200).send({ vinyl })
+    res.status(200).send({
+      vinyl
+    })
   }
   catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
