@@ -80,7 +80,7 @@ app.put('/vinyls/:id', async (req, res) => {
   }
 })
 
-// Filters
+// Filter by Artist
 app.get('/vinyls/:artist', async (req, res) => {
   const { artist } = req.params
 
