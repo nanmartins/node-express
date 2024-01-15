@@ -4,17 +4,17 @@ const cors = require('cors')
 require('dotenv').config()
 
 const app = express()
+const PORT = process.env.PORT
 
 app.use(express.json())
 app.use(cors())
-const PORT = process.env.PORT
-
 mongoose.connect(process.env.MONGODB_URI)
 
 const vinylSchema = new mongoose.Schema({
   artist: String,
   album: String,
-  year: Number
+  year: String,
+  albumCover: String
 })
 
 const Vinyl = mongoose.model('Vinyl', vinylSchema)
@@ -33,9 +33,9 @@ app.get('/vinyls', async (req, res) => {
 
 
 app.post('/vinyls', async (req, res) => {
-  const { artist, album, year } = req.body
+  const { artist, album, year, albumCover } = req.body
 
-  if(!artist || !album || !year) {
+  if(!artist || !album || !year || !albumCover) {
     return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
   }
 
@@ -43,7 +43,8 @@ app.post('/vinyls', async (req, res) => {
     const newVinyl = new Vinyl({
       artist,
       album,
-      year
+      year,
+      albumCover
     })
 
     await newVinyl.save()
@@ -57,7 +58,7 @@ app.post('/vinyls', async (req, res) => {
 
 app.put('/vinyls/:id', async (req, res) => {
   const { id } = req.params
-  const { artist, album, year } = req.body
+  const { artist, album, year, albumCover } = req.body
 
   try {
     const vinyl = await Vinyl.findById(id)
@@ -69,6 +70,7 @@ app.put('/vinyls/:id', async (req, res) => {
     vinyl.artist = artist || vinyl.artist
     vinyl.album = album || vinyl.album
     vinyl.year = year || vinyl.year
+    vinyl.albumCover = albumCover || vinyl.albumCover
 
     await vinyl.save()
 
