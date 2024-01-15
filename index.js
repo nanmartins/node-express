@@ -4,15 +4,16 @@ const cors = require('cors')
 require('dotenv').config()
 
 const app = express()
-const username = encodeURIComponent(process.env.USER_NAME)
-const password = encodeURIComponent(process.env.USER_PASSWORD)
+// const username = encodeURIComponent(process.env.USER_NAME)
+// const password = encodeURIComponent(process.env.USER_PASSWORD)
 const PORT = 8080
 
 app.use(express.json())
 app.use(cors())
 
 // mongoose.connect('mongodb://localhost:27017/vinylsDB')
-mongoose.connect(`mongodb+srv://${username}:${password}@cluster0.slzg83z.mongodb.net/?retryWrites=true&w=majority`)
+// mongoose.connect(`mongodb+srv://${username}:${password}@cluster0.slzg83z.mongodb.net/?retryWrites=true&w=majority`)
+mongoose.connect(process.env.MONGODB_URI)
 
 const vinylSchema = new mongoose.Schema({
   artist: String,
