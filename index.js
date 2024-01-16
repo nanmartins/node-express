@@ -94,7 +94,7 @@ app.delete('/vinyls/:id', async (req, res) => {
       return res.status(404).send({ message: 'Vinyl not found.' })
     }
 
-    res.status(200).send({ message: 'Vinyl deleted successfully', deletedVinyl: vinyl })
+    res.status(200).send({ message: 'Vinyl deleted successfully' })
   }
   catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
