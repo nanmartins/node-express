@@ -122,6 +122,7 @@ app.get('/vinyls/:id', async (req, res) => {
   }
 })
 
+
 // Filter by Artist
 app.get('/vinyls/artists/:artist', async (req, res) => {
   const { artist } = req.params
