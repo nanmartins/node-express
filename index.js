@@ -101,8 +101,29 @@ app.delete('/vinyls/:id', async (req, res) => {
   }
 })
 
+
+
+// Filter Vinyl by ID
+app.get('/vinyls/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const vinyl = await Vinyl.findById(id)
+    if (!vinyl) {
+      console.log(vinyl)
+      return res.status(404).send({ message: 'Vinyl not found.' })
+    }
+    res.status(200).send({
+      vinyl
+    })
+    console.log(vinyl)
+  }
+  catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
+  }
+})
+
 // Filter by Artist
-app.get('/vinyls/:artist', async (req, res) => {
+app.get('/vinyls/artists/:artist', async (req, res) => {
   const { artist } = req.params
 
   try {
@@ -116,22 +137,6 @@ app.get('/vinyls/:artist', async (req, res) => {
   }
 })
 
-// Filter Vinyl by ID
-app.get('/vinyls/:id', async (req, res) => {
-  const { id } = req.params
-  try {
-    const vinyl = await Vinyl.findById(id)
-    if (!vinyl) {
-      return res.status(404).send({ message: 'Vinyl not found.' })
-    }
-    res.status(200).send({
-      vinyl
-    })
-  }
-  catch (error) {
-    res.status(500).send({ message: 'Internal Server Error' })
-  }
-})
 
 
 
