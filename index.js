@@ -109,13 +109,11 @@ app.get('/vinyls/:id', async (req, res) => {
   try {
     const vinyl = await Vinyl.findById(id)
     if (!vinyl) {
-      console.log(vinyl)
       return res.status(404).send({ message: 'Vinyl not found.' })
     }
     res.status(200).send({
       vinyl
     })
-    console.log(vinyl)
   }
   catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
