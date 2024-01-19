@@ -33,11 +33,12 @@ app.get('/vinyls', async (req, res) => {
     const vinyls = await Vinyl.find().skip(skip).limit(limit)
     res.status(200).send({
       vinyls,
-      pages,
+      page,
       totalPages
     })
   }
   catch (error) {
+    console.error('erro no get', error)
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
