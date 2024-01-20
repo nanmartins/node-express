@@ -29,8 +29,10 @@ app.get('/vinyls', async (req, res) => {
     const skip = (page - 1) * limit
     const totalVinyls = await Vinyl.countDocuments()
     const totalPages = Math.ceil(totalVinyls / limit)
-
     const vinyls = await Vinyl.find().skip(skip).limit(limit)
+
+    console.log('Request received with params:', { page, limit, skip, totalVinyls, totalPages })
+
     res.status(200).send({
       vinyls,
       page,
