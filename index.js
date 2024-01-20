@@ -4,7 +4,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(cors())
@@ -31,8 +31,6 @@ app.get('/vinyls', async (req, res) => {
     const totalPages = Math.ceil(totalVinyls / limit)
     const vinyls = await Vinyl.find().skip(skip).limit(limit)
 
-    console.log('Request received with params:', { page, limit, skip, totalVinyls, totalPages })
-
     res.status(200).send({
       vinyls,
       page,
@@ -40,14 +38,14 @@ app.get('/vinyls', async (req, res) => {
     })
   }
   catch (error) {
-    console.error('erro no get', error)
+    // console.error('erro no get', error)
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
 
 
 app.post('/vinyls', async (req, res) => {
-  const { artist, album, year, albumCover } = req.body
+  const { artist, album, year, albumCover, albumDescription } = req.body
 
   if(!artist || !album || !year || !albumCover || !albumDescription) {
     return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
@@ -150,7 +148,6 @@ app.get('/vinyls/artists/:artist', async (req, res) => {
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
-
 
 
 
