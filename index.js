@@ -38,7 +38,6 @@ app.get('/vinyls', async (req, res) => {
     })
   }
   catch (error) {
-    // console.error('erro no get', error)
     res.status(500).send({ message: 'Internal Server Error' })
   }
 })
@@ -50,7 +49,6 @@ app.post('/vinyls', async (req, res) => {
   if(!artist || !album || !year || !albumCover || !albumDescription) {
     return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
   }
-
   try {
     const newVinyl = new Vinyl({
       artist,
@@ -61,7 +59,6 @@ app.post('/vinyls', async (req, res) => {
     })
 
     await newVinyl.save()
-
     res.status(201).send({ message: 'Vinyl created successfully', vinyl: newVinyl })
   }
   catch (error) {
@@ -76,11 +73,9 @@ app.put('/vinyls/:id', async (req, res) => {
 
   try {
     const vinyl = await Vinyl.findById(id)
-
     if (!vinyl) {
       return res.status(404).send({ message: 'Vinyl not found.' })
     }
-
     vinyl.artist = artist || vinyl.artist
     vinyl.album = album || vinyl.album
     vinyl.year = year || vinyl.year
@@ -88,7 +83,6 @@ app.put('/vinyls/:id', async (req, res) => {
     vinyl.albumDescription = albumDescription || vinyl.albumDescription
 
     await vinyl.save()
-
     res.status(200).send({ message: 'Vinyl updated successfully', vinyl })
   }
   catch (error) {
@@ -99,14 +93,11 @@ app.put('/vinyls/:id', async (req, res) => {
 
 app.delete('/vinyls/:id', async (req, res) => {
   const { id } = req.params
-
   try {
     const vinyl = await Vinyl.findByIdAndDelete(id)
-
     if (!vinyl) {
       return res.status(404).send({ message: 'Vinyl not found.' })
     }
-
     res.status(200).send({ message: 'Vinyl deleted successfully' })
   }
   catch (error) {
@@ -137,7 +128,6 @@ app.get('/vinyls/:id', async (req, res) => {
 // Filter by Artist
 app.get('/vinyls/artists/:artist', async (req, res) => {
   const { artist } = req.params
-
   try {
     const vinyls = await Vinyl.find({ artist })
     res.status(200).send({
