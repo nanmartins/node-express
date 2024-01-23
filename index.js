@@ -15,7 +15,8 @@ const vinylSchema = new mongoose.Schema({
   album: String,
   year: String,
   albumCover: String,
-  albumDescription: String
+  albumDescription: String,
+  pos: Number
 })
 
 const Vinyl = mongoose.model('Vinyl', vinylSchema)
@@ -44,9 +45,9 @@ app.get('/vinyls', async (req, res) => {
 
 
 app.post('/vinyls', async (req, res) => {
-  const { artist, album, year, albumCover, albumDescription } = req.body
+  const { artist, album, year, albumCover, albumDescription, pos } = req.body
 
-  if(!artist || !album || !year || !albumCover || !albumDescription) {
+  if(!artist || !album || !year || !albumCover || !albumDescription || !pos) {
     return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
   }
   try {
@@ -55,7 +56,8 @@ app.post('/vinyls', async (req, res) => {
       album,
       year,
       albumCover,
-      albumDescription
+      albumDescription,
+      pos
     })
 
     await newVinyl.save()
@@ -69,7 +71,7 @@ app.post('/vinyls', async (req, res) => {
 
 app.put('/vinyls/:id', async (req, res) => {
   const { id } = req.params
-  const { artist, album, year, albumCover, albumDescription } = req.body
+  const { artist, album, year, albumCover, albumDescription, pos } = req.body
 
   try {
     const vinyl = await Vinyl.findById(id)
@@ -81,6 +83,7 @@ app.put('/vinyls/:id', async (req, res) => {
     vinyl.year = year || vinyl.year
     vinyl.albumCover = albumCover || vinyl.albumCover
     vinyl.albumDescription = albumDescription || vinyl.albumDescription
+    vinyl.pos = pos || vinyl.pos
 
     await vinyl.save()
     res.status(200).send({ message: 'Vinyl updated successfully', vinyl })
