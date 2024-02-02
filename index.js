@@ -16,31 +16,12 @@ const vinylSchema = new mongoose.Schema({
   year: String,
   albumCover: String,
   albumDescription: String,
+  createdAt: { type: Date, default: Date.now }
 })
 
 
 const Vinyl = mongoose.model('Vinyl', vinylSchema)
 
-
-// app.get('/vinyls', async (req, res) => {
-//   try {
-//     const page = parseInt(req.query.page) || 1
-//     const limit = parseInt(req.query.limit) || 9
-//     const skip = (page - 1) * limit
-//     const totalVinyls = await Vinyl.countDocuments()
-//     const totalPages = Math.ceil(totalVinyls / limit)
-//     const vinyls = await Vinyl.find().skip(skip).limit(limit)
-
-//     res.status(200).send({
-//       vinyls,
-//       page,
-//       totalPages
-//     })
-//   }
-//   catch (error) {
-//     res.status(500).send({ message: 'Internal Server Error' })
-//   }
-// })
 
 
 app.get('/vinyls', async (req, res) => {
@@ -52,7 +33,7 @@ app.get('/vinyls', async (req, res) => {
 
     let sortQuery = {}
     if (req.query.sort === 'latest') {
-      sortQuery = { _id: -1 }
+      sortQuery = { createdAt: -1 }
     }
 
     const totalPages = Math.ceil(totalVinyls / limit)
@@ -82,6 +63,7 @@ app.post('/vinyls', async (req, res) => {
       year,
       albumCover,
       albumDescription,
+      createdAt: new Date()
     })
 
     await newVinyl.save()
