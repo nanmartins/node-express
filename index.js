@@ -22,25 +22,51 @@ const vinylSchema = new mongoose.Schema({
 const Vinyl = mongoose.model('Vinyl', vinylSchema)
 
 
+// app.get('/vinyls', async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1
+//     const limit = parseInt(req.query.limit) || 9
+//     const skip = (page - 1) * limit
+//     const totalVinyls = await Vinyl.countDocuments()
+//     const totalPages = Math.ceil(totalVinyls / limit)
+//     const vinyls = await Vinyl.find().skip(skip).limit(limit)
+
+//     res.status(200).send({
+//       vinyls,
+//       page,
+//       totalPages
+//     })
+//   }
+//   catch (error) {
+//     res.status(500).send({ message: 'Internal Server Error' })
+//   }
+// })
+
+
 app.get('/vinyls', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 9
     const skip = (page - 1) * limit
     const totalVinyls = await Vinyl.countDocuments()
+
+    let sortQuery = {}
+    if (req.query.sort === 'latest') {
+      sortQuery = { _id: -1 }
+    }
+
     const totalPages = Math.ceil(totalVinyls / limit)
-    const vinyls = await Vinyl.find().skip(skip).limit(limit)
+    const vinyls = await Vinyl.find().sort(sortQuery).skip(skip).limit(limit)
 
     res.status(200).send({
       vinyls,
       page,
       totalPages
-    })
+    });
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' });
   }
-  catch (error) {
-    res.status(500).send({ message: 'Internal Server Error' })
-  }
-})
+});
 
 
 app.post('/vinyls', async (req, res) => {
