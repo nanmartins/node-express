@@ -28,7 +28,7 @@ app.get('/vinyls', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1
     // const limit = parseInt(req.query.limit) || 9
-    const limit = parseInt(req.query.limit)
+    const limit = parseInt(req.query.limit) || 12
     const skip = (page - 1) * limit
     const totalVinyls = await Vinyl.countDocuments()
 
@@ -43,7 +43,9 @@ app.get('/vinyls', async (req, res) => {
     res.status(200).send({
       vinyls,
       page,
-      totalPages
+      totalPages,
+      sortQuery,
+      totalVinyls
     });
   } catch (error) {
     res.status(500).send({ message: 'Internal Server Error' });
