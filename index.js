@@ -26,9 +26,8 @@ const Vinyl = mongoose.model('Vinyl', vinylSchema)
 
 app.get('/vinyls', async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1
-    // const limit = parseInt(req.query.limit) || 9
-    const limit = parseInt(req.query.limit) || 12
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
     const skip = (page - 1) * limit
     const totalVinyls = await Vinyl.countDocuments()
 
@@ -44,8 +43,6 @@ app.get('/vinyls', async (req, res) => {
       vinyls,
       page,
       totalPages,
-      sortQuery,
-      totalVinyls
     });
   } catch (error) {
     res.status(500).send({ message: 'Internal Server Error' });
