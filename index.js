@@ -19,6 +19,20 @@ const vinylSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 })
 
+// need update vinyl schema with more infos, like genre, tracks, etc.
+// create a new schema to receive recomendations
+// also work on filters
+
+// const vinylSchema = new mongoose.Schema({
+//   artist: String,
+//   album: String,
+//   year: String,
+//   albumCover: String,
+//   albumDescription: String,
+//   genre: String,
+//   tracks: [String],
+//   createdAt: { type: Date, default: Date.now }
+// })
 
 const Vinyl = mongoose.model('Vinyl', vinylSchema)
 
