@@ -13,11 +13,13 @@ mongoose.connect(process.env.MONGODB_URI)
 // need update vinyl schema with more infos, like genre, tracks, etc.
 // create a new schema to receive recomendations
 // also work on filters
-const trackSchema = new mongoose.Schema({
-  trackNumber: Number,
-  title: String,
-  trackLength: String
-})
+
+
+// const trackSchema = new mongoose.Schema({
+//   trackNumber: Number,
+//   title: String,
+//   trackLength: String
+// })
 
 const vinylSchema = new mongoose.Schema({
   artist: String,
@@ -31,12 +33,12 @@ const vinylSchema = new mongoose.Schema({
   producer: String,
   tracks: {
     disc1: {
-      sideA: [trackSchema],
-      sideB: [trackSchema]
+      sideA: [{trackNumber: Number, title: String, trackLength: String}],
+      sideB: [{trackNumber: Number, title: String, trackLength: String}]
     },
     disc2: {
-      sideA: [trackSchema],
-      sideB: [trackSchema]
+      sideA: [{trackNumber: Number, title: String, trackLength: String}],
+      sideB: [{trackNumber: Number, title: String, trackLength: String}]
     }
   },
   albumDescription: String,
@@ -92,12 +94,12 @@ app.post('/vinyls', async (req, res) => {
       producer,
       tracks: {
         disc1: {
-          sideA: tracks.disc1.sideA || [],
-          sideB: tracks.disc1.sideB || []
+          sideA: [{trackNumber: Number, title: String, trackLength: String}],
+          sideB: [{trackNumber: Number, title: String, trackLength: String}]
         },
         disc2: {
-          sideA: tracks.disc2.sideA || [],
-          sideB: tracks.disc2.sideB || []
+          sideA: [{trackNumber: Number, title: String, trackLength: String}],
+          sideB: [{trackNumber: Number, title: String, trackLength: String}]
         }
       },
       albumDescription,
