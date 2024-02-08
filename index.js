@@ -10,29 +10,38 @@ app.use(express.json())
 app.use(cors())
 mongoose.connect(process.env.MONGODB_URI)
 
+// need update vinyl schema with more infos, like genre, tracks, etc.
+// create a new schema to receive recomendations
+// also work on filters
+const trackSchema = new mongoose.Schema({
+  trackNumber: Number,
+  title: String,
+  trackLength: String
+})
+
 const vinylSchema = new mongoose.Schema({
   artist: String,
   album: String,
   year: String,
   albumCover: String,
+  studio: String,
+  length: String,
+  genre: [String],
+  label: String,
+  producer: String,
+  tracks: {
+    disc1: {
+      sideA: [trackSchema],
+      sideB: [trackSchema]
+    },
+    disc2: {
+      sideA: [trackSchema],
+      sideB: [trackSchema]
+    }
+  },
   albumDescription: String,
   createdAt: { type: Date, default: Date.now }
 })
-
-// need update vinyl schema with more infos, like genre, tracks, etc.
-// create a new schema to receive recomendations
-// also work on filters
-
-// const vinylSchema = new mongoose.Schema({
-//   artist: String,
-//   album: String,
-//   year: String,
-//   albumCover: String,
-//   albumDescription: String,
-//   genre: String,
-//   tracks: [String],
-//   createdAt: { type: Date, default: Date.now }
-// })
 
 const Vinyl = mongoose.model('Vinyl', vinylSchema)
 
