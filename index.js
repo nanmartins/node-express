@@ -25,7 +25,7 @@ const vinylSchema = new mongoose.Schema({
   year: String,
   albumCover: String,
   studio: String,
-  length: String,
+  albumLength: String,
   genre: [String],
   label: String,
   producer: String,
@@ -74,9 +74,9 @@ app.get('/vinyls', async (req, res) => {
 
 
 app.post('/vinyls', async (req, res) => {
-  const { artist, album, year, albumCover, albumDescription } = req.body
+  const { artist, album, year, albumCover, studio, albumLength, genre, label, producer, tracks, albumDescription } = req.body
 
-  if(!artist || !album || !year || !albumCover || !albumDescription) {
+  if(!artist || !album || !year || !albumCover || !albumDescription || !studio || !albumLength || !genre || !label || !producer || !tracks) {
     return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
   }
   try {
@@ -85,6 +85,12 @@ app.post('/vinyls', async (req, res) => {
       album,
       year,
       albumCover,
+      studio,
+      albumLength,
+      genre,
+      label,
+      producer,
+      tracks,
       albumDescription,
       createdAt: new Date()
     })
@@ -100,7 +106,7 @@ app.post('/vinyls', async (req, res) => {
 
 app.put('/vinyls/:id', async (req, res) => {
   const { id } = req.params
-  const { artist, album, year, albumCover, albumDescription } = req.body
+  const { artist, album, year, albumCover, studio, albumLength, genre, label, producer, tracks, albumDescription } = req.body
 
   try {
     const vinyl = await Vinyl.findById(id)
@@ -111,6 +117,12 @@ app.put('/vinyls/:id', async (req, res) => {
     vinyl.album = album || vinyl.album
     vinyl.year = year || vinyl.year
     vinyl.albumCover = albumCover || vinyl.albumCover
+    vinyl.studio = studio || vinyl.studio
+    vinyl.albumLength = albumLength || vinyl.albumLength
+    vinyl.genre = genre || vinyl.genre
+    vinyl.label = label || vinyl.label
+    vinyl.producer = producer || vinyl.producer
+    vinyl.tracks = tracks || vinyl.tracks
     vinyl.albumDescription = albumDescription || vinyl.albumDescription
 
     await vinyl.save()
