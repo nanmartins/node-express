@@ -90,7 +90,16 @@ app.post('/vinyls', async (req, res) => {
       genre,
       label,
       producer,
-      tracks,
+      tracks: {
+        disc1: {
+          sideA: tracks.disc1.sideA || [],
+          sideB: tracks.disc1.sideB || []
+        },
+        disc2: {
+          sideA: tracks.disc2.sideA || [],
+          sideB: tracks.disc2.sideB || []
+        }
+      },
       albumDescription,
       createdAt: new Date()
     })
