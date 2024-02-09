@@ -106,7 +106,7 @@ app.post('/vinyls', async (req, res) => {
       producer,
       tracks: {
         disc1: tracks.disc1,
-        disc2: []
+        disc2: tracks.disc2
       },
       albumDescription,
       createdAt: new Date()
