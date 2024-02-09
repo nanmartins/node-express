@@ -15,10 +15,28 @@ mongoose.connect(process.env.MONGODB_URI)
 // also work on filters
 
 
-// const trackSchema = new mongoose.Schema({
-//   trackNumber: Number,
-//   title: String,
-//   trackLength: String
+// const vinylSchema = new mongoose.Schema({
+//   artist: String,
+//   album: String,
+//   year: String,
+//   albumCover: String,
+//   studio: String,
+//   albumLength: String,
+//   genre: [String],
+//   label: String,
+//   producer: String,
+//   tracks: {
+//     disc1: {
+//       sideA: [{trackNumber: Number, title: String, trackLength: String}],
+//       sideB: [{trackNumber: Number, title: String, trackLength: String}]
+//     },
+//     disc2: {
+//       sideA: [{trackNumber: Number, title: String, trackLength: String}],
+//       sideB: [{trackNumber: Number, title: String, trackLength: String}]
+//     }
+//   },
+//   albumDescription: String,
+//   createdAt: { type: Date, default: Date.now }
 // })
 
 const vinylSchema = new mongoose.Schema({
@@ -32,14 +50,8 @@ const vinylSchema = new mongoose.Schema({
   label: String,
   producer: String,
   tracks: {
-    disc1: {
-      sideA: [{trackNumber: Number, title: String, trackLength: String}],
-      sideB: [{trackNumber: Number, title: String, trackLength: String}]
-    },
-    disc2: {
-      sideA: [{trackNumber: Number, title: String, trackLength: String}],
-      sideB: [{trackNumber: Number, title: String, trackLength: String}]
-    }
+    disc1: [],
+    disc2: []
   },
   albumDescription: String,
   createdAt: { type: Date, default: Date.now }
@@ -93,14 +105,8 @@ app.post('/vinyls', async (req, res) => {
       label,
       producer,
       tracks: {
-        disc1: {
-          sideA: [{trackNumber: Number, title: String, trackLength: String}],
-          sideB: [{trackNumber: Number, title: String, trackLength: String}]
-        },
-        disc2: {
-          sideA: [{trackNumber: Number, title: String, trackLength: String}],
-          sideB: [{trackNumber: Number, title: String, trackLength: String}]
-        }
+        disc1: [],
+        disc2: []
       },
       albumDescription,
       createdAt: new Date()
