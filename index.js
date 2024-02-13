@@ -10,34 +10,10 @@ app.use(express.json())
 app.use(cors())
 mongoose.connect(process.env.MONGODB_URI)
 
-// need update vinyl schema with more infos, like genre, tracks, etc.
+// need update vinyl schema with more infos, like genre, tracks, etc. (done)
 // create a new schema to receive recomendations
 // also work on filters
 
-
-// const vinylSchema = new mongoose.Schema({
-//   artist: String,
-//   album: String,
-//   year: String,
-//   albumCover: String,
-//   studio: String,
-//   albumLength: String,
-//   genre: [String],
-//   label: String,
-//   producer: String,
-//   tracks: {
-//     disc1: {
-//       sideA: [{trackNumber: Number, title: String, trackLength: String}],
-//       sideB: [{trackNumber: Number, title: String, trackLength: String}]
-//     },
-//     disc2: {
-//       sideA: [{trackNumber: Number, title: String, trackLength: String}],
-//       sideB: [{trackNumber: Number, title: String, trackLength: String}]
-//     }
-//   },
-//   albumDescription: String,
-//   createdAt: { type: Date, default: Date.now }
-// })
 
 const vinylSchema = new mongoose.Schema({
   artist: String,
@@ -50,8 +26,14 @@ const vinylSchema = new mongoose.Schema({
   label: String,
   producer: String,
   tracks: {
-    disc1: [],
-    disc2: []
+    disc1: {
+      sideA: [],
+      sideB: []
+    },
+    disc2: {
+      sideA: [],
+      sideB: []
+    }
   },
   albumDescription: String,
   createdAt: { type: Date, default: Date.now }
@@ -89,6 +71,7 @@ app.get('/vinyls', async (req, res) => {
 
 app.post('/vinyls', async (req, res) => {
   const { artist, album, year, albumCover, studio, albumLength, genre, label, producer, tracks, albumDescription } = req.body
+  const { disc1, disc2 } = req.body.tracks
 
   if(!artist || !album || !year || !albumCover || !albumDescription || !studio || !albumLength || !genre || !label || !producer || !tracks) {
     return res.status(400).send({ message: 'Incomplete information provided for creating a vinyl.' })
@@ -105,8 +88,14 @@ app.post('/vinyls', async (req, res) => {
       label,
       producer,
       tracks: {
-        disc1: tracks.disc1,
-        disc2: tracks.disc2
+        disc1: {
+          sideA: disc1.sideA,
+          sideB: disc1.sideB
+        },
+        disc2: {
+          sideA: disc2.sideA,
+          sideB: disc2.sideB
+        }
       },
       albumDescription,
       createdAt: new Date()
