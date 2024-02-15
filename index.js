@@ -10,11 +10,11 @@ app.use(express.json())
 app.use(cors())
 mongoose.connect(process.env.MONGODB_URI)
 
-const vinylRoutes = require('./routes/vinylRoutes')
-const recommendationRoutes = require('./routes/recommendationRoutes')
+const vinylRoutes = require('./routes/vinylRoutes.js')
+const recommendationRoutes = require('./routes/recommendationRoutes.js')
 
-app.use('/vinyls', vinylRoutes)
-app.use('/recommendations', recommendationRoutes)
+app.use(vinylRoutes)
+app.use(recommendationRoutes)
 
 
 // need update vinyl schema with more infos, like genre, tracks, etc. (done)
