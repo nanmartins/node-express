@@ -16,10 +16,10 @@ router.get('/recommendations', async (req, res) => {
 })
 
 
-router.post('/recommendation', async (req, res) => {
+router.post('/recommendations', async (req, res) => {
   try {
-    const { recommendedBy, recommendedAlbum, recommendedVinyl } = req.body
-    const newRecommendation = new Recommendation({ recommendedBy, recommendedAlbum, recommendedVinyl })
+    const { recommendedBy, recommendedAlbum, message } = req.body
+    const newRecommendation = new Recommendation({ recommendedBy, recommendedAlbum, message })
     await newRecommendation.save()
     res.status(201).send({ message: 'Recommendation added successfully', recommendation: newRecommendation })
   } catch (error) {
