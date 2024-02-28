@@ -8,7 +8,14 @@ router.get('/vinyls', async (req, res) => {
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     const skip = (page - 1) * limit
-    const totalVinyls = await Vinyl.countDocuments()
+    // const totalVinyls = await Vinyl.countDocuments()
+
+    let genreQuery = {}
+    if (req.query.genre) {
+      genreQuery = { genre: req.query.genre }
+    }
+
+    const totalVinyls = await Vinyl.countDocuments(genreQuery)
 
     let sortQuery = {}
     if (req.query.sort === 'latest') {
@@ -16,7 +23,9 @@ router.get('/vinyls', async (req, res) => {
     }
 
     const totalPages = Math.ceil(totalVinyls / limit)
-    const vinyls = await Vinyl.find().sort(sortQuery).skip(skip).limit(limit)
+    // const vinyls = await Vinyl.find().sort(sortQuery).skip(skip).limit(limit)
+    const vinyls = await Vinyl.find(genreQuery).sort(sortQuery).skip(skip).limit(limit)
+
 
     res.status(200).send({
       vinyls,
