@@ -148,4 +148,23 @@ router.get('/vinyls/artists/:artist', async (req, res) => {
   }
 })
 
+
+// Filter by Genre
+router.get('/vinyls/genres/:genre', async (req, res) => {
+  const { genre } = req.params;
+  try {
+    // Transforma a string em uma lista de gêneros
+    const genresList = genre.split(',').map(g => g.trim())
+    // Constrói a expressão regular para cada gênero
+    const regexArray = genresList.map(g => new RegExp(g, 'i'))
+    // Procura vinis que contenham qualquer um dos gêneros na lista
+    const vinyls = await Vinyl.find({ genre: { $in: regexArray } })
+    res.status(200).send({ vinyls })
+  }
+  catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' })
+  }
+})
+
+
 module.exports = router
