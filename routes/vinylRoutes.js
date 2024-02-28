@@ -150,7 +150,7 @@ router.get('/vinyls/artists/:artist', async (req, res) => {
 
 
 // Filter by Genre
-router.get('/vinyls/genres/:genre', async (req, res) => {
+router.get('/vinyls/genre/:genre', async (req, res) => {
   const { genre } = req.params;
   try {
     // Transforma a string em uma lista de gêneros
