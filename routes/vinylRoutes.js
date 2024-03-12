@@ -183,7 +183,7 @@ router.get('/vinyls/genres/top', async (req, res) => {
       // Transforma a matriz de gêneros em um documento para cada gênero
       { $unwind: "$genre" },
       // Agrupa os documentos por gênero e conta quantos documentos há em cada grupo
-      { $group: { genre: "$genre", count: { $sum: 1 } } },
+      { $group: { genre_id: "$genre", count: { $sum: 1 } } },
       // Ordena pela contagem em ordem decrescente
       { $sort: { count: -1 } },
       { $limit: 4 }
